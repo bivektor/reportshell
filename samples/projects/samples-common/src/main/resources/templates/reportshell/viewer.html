@@ -1,0 +1,38 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${report.displayName} + '| ReportShell Samples'"></title>
+  <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}"/>
+  <th:block th:replace="~{fragments/layout :: head-common}" />
+</head>
+<body>
+<div style="display: flex; flex-direction: column; height: 100vh">
+  <div th:replace="~{fragments/layout :: header}"></div>
+  <div id="root" style="flex-grow: 1; display: flex; flex-direction: column"></div>
+</div>
+<script type="module" th:inline="javascript">
+  const localeParts = {
+    language: /*[[${locale.language}]]*/ '',
+    country: /*[[${locale.country}]]*/ '',
+    script: /*[[${locale.script}]]*/ '',
+    variant: /*[[${locale.variant}]]*/ '',
+  };
+
+  const viewerModule = await import(
+      '[(@{/reportshell/assets/reportshell-viewer-react-1.0.0.js})]'
+      );
+
+  window.reportshell = {
+    viewerApiBaseUrl: '[(@{/reportshell/api/v1})]',
+    exportFormats: /*[[(${exportFormats})]]*/ [],
+    i18n: await viewerModule.getBestMatchingLocale(localeParts),
+    csrf: () => ({
+      parameterName: '_csrf',
+      token: document.querySelector('meta[name="_csrf"]')?.getAttribute('content'),
+    }),
+  };
+
+  const props = /*[[(${props})]]*/ {};
+  viewerModule.mountReportViewer(document.getElementById('root'), props);
+</script>
+</body>
+</html>

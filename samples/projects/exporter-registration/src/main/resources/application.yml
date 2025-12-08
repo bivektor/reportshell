@@ -1,0 +1,11 @@
+reportshell:
+  export:
+    formats:
+      rtf:
+        title: Rich Text Document (.rtf)
+        extension: ".rtf"
+        order: 155
+
+spring:
+  config:
+    import: "classpath:base-config.yml"

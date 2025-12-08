@@ -1,0 +1,134 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="Countries" language="java" pageWidth="595" pageHeight="595" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DemoDB.jrdax"/>
+	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
+	<property name="reportshell.report.isExecutable" value="true"/>
+	<style name="Title" fontSize="50.0" bold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontSize="18.0"/>
+	<style name="Column header" forecolor="#FAFAFA" fontSize="14.0" bold="true"/>
+	<style name="Detail" fontSize="12.0"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle backcolor="#E6DAC3">
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<style name="Footer" mode="Opaque" forecolor="#FCFCFC" backcolor="#0574EB"/>
+	<parameter name="region" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.js.ic.ds" value=""/>
+		<property name="com.jaspersoft.studio.js.ic.label" value="Region"/>
+		<property name="com.jaspersoft.studio.js.ic.type" value="SINGLE_QUERY"/>
+		<property name="com.jaspersoft.studio.js.ic.value" value="{&quot;query&quot;:&quot;SELECT * from \&quot;REGIONS\&quot; order by name&quot;,&quot;language&quot;:&quot;sql&quot;,&quot;valueField&quot;:&quot;id&quot;,&quot;columns&quot;:[&quot;name&quot;]}"/>
+	</parameter>
+	<query language="SQL"><![CDATA[ select c.* , r.name as region
+ from "COUNTRIES" c
+ join "REGIONS" as r on c.region_id = r.id
+ where ( $P{region} IS NULL OR c.region_id = $P{region} )
+  order by name]]></query>
+	<field name="ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="COUNTRIES"/>
+	</field>
+	<field name="REGION_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="REGION_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="REGION_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="COUNTRIES"/>
+	</field>
+	<field name="NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="NAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="COUNTRIES"/>
+	</field>
+	<field name="REGION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="REGION"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="REGIONS"/>
+	</field>
+	<title height="136" splitType="Stretch">
+		<element kind="frame" uuid="9762e832-728f-46e3-9e80-0fc7cbaa17f0" stretchType="NoStretch" x="0" y="0" width="555" height="100">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<element kind="frame" uuid="2b21ebaa-1780-4e4d-badc-cc326b63a2bd" mode="Opaque" x="0" y="0" width="555" height="70" backcolor="#3E3854">
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="ShowOutOfBoundContent" value="true"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<element kind="staticText" uuid="b39a9fc9-63de-482f-9bd1-d335c3591cac" x="10" y="15" width="380" height="45" forecolor="#D6CCED" fontSize="26.0" bold="false" style="Title">
+					<text><![CDATA[Countries]]></text>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="image" uuid="78c1b564-b59e-4451-a475-beb779f857d4" stretchType="NoStretch" x="480" y="3" width="75" height="65">
+					<expression><![CDATA["/shared/img/logo.png"]]></expression>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</element>
+			</element>
+			<element kind="frame" uuid="bec00eaa-9413-4d9c-922e-9756492d10b4" mode="Opaque" x="0" y="70" width="555" height="30" forecolor="#000000" backcolor="#D4537E">
+				<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<element kind="textField" uuid="2ea69e25-3eb8-4768-8101-a3553181e6d0" x="399" y="8" width="144" height="20" forecolor="#FFFFFF" fontSize="12.0" pattern="EEEEE dd MMMMM yyyy" hTextAlign="Right">
+					<expression><![CDATA[new java.util.Date()]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</element>
+			</element>
+		</element>
+		<property name="net.sf.jasperreports.export.csv.exclude" value="true"/>
+	</title>
+	<pageHeader splitType="Stretch"/>
+	<columnHeader height="16" splitType="Stretch">
+		<element kind="staticText" uuid="b71cc06d-f95b-4fe0-96d3-b0f1345685fc" x="0" y="0" width="278" height="16">
+			<text><![CDATA[NAME]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="96bd6e48-dab3-4e43-861f-10c4d4069284"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="staticText" uuid="6970aa0c-4fe5-4d54-b872-e294074b4ed9" x="278" y="0" width="277" height="16">
+			<text><![CDATA[REGION]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7149d1d1-552b-418b-969e-9ddf51f7c4f5"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+		</element>
+		<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<element kind="textField" uuid="60a7995d-4351-4d50-92bc-08a4c811b846" x="0" y="0" width="278" height="30">
+				<expression><![CDATA[$F{NAME}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="96bd6e48-dab3-4e43-861f-10c4d4069284"/>
+			</element>
+			<element kind="textField" uuid="65af3dba-c996-47b4-97ae-88b3a81d5efc" x="278" y="0" width="277" height="30">
+				<expression><![CDATA[$F{REGION}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7149d1d1-552b-418b-969e-9ddf51f7c4f5"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			</element>
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
+		</band>
+	</detail>
+	<columnFooter height="6" splitType="Stretch">
+		<element kind="line" uuid="fa5e88d5-a011-4e32-8f12-ce923f903111" positionType="FixRelativeToBottom" x="0" y="3" width="1" height="1">
+			<pen lineWidth="0.5" lineColor="#999999"/>
+		</element>
+	</columnFooter>
+	<pageFooter height="25" splitType="Stretch">
+		<element kind="frame" uuid="1b90a08d-7bc2-41f6-8c82-bf97a01a1fe1" mode="Opaque" x="0" y="1" width="555" height="24" forecolor="#D0B48E" backcolor="#3E3854" style="Footer">
+			<element kind="textField" uuid="b8f33452-7ea5-4bdd-8648-f576d6792e97" x="5" y="1" width="197" height="20" forecolor="#FFFFFF" fontSize="10.0" pattern="EEEEE dd MMMMM yyyy" bold="false" vTextAlign="Middle" style="Column header">
+				<expression><![CDATA[new java.util.Date()]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			</element>
+			<element kind="textField" uuid="c6f8dea1-04e7-40bb-a228-f8c2f0a1c178" mode="Transparent" x="433" y="1" width="80" height="20" fontSize="10.0" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Column header">
+				<expression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			</element>
+			<element kind="textField" uuid="4f38bf84-2d48-4a45-8844-b6d089d619c3" x="513" y="1" width="40" height="20" fontSize="10.0" evaluationTime="Report" bold="false" vTextAlign="Middle" style="Column header">
+				<expression><![CDATA[" " + $V{PAGE_NUMBER}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			</element>
+		</element>
+	</pageFooter>
+	<summary splitType="Stretch"/>
+</jasperReport>

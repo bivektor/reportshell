@@ -1,0 +1,223 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="Orders" language="java" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="30" uuid="9cb9e7c3-b31a-4a1d-bd0b-6d87a42a7f4f">
+	<property name="template.engine" value="tabular_template"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DemoDB.jrdax"/>
+	<property name="com.jaspersoft.jrs.data.source" value="dataSources/custom"/>
+	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="true"/>
+	<property name="reportshell.report.isExecutable" value="true"/>
+	<style name="Title" forecolor="#1A1A1A" fontSize="28.0" bold="false"/>
+	<style name="SubTitle" forecolor="#555555" fontSize="12.0"/>
+	<style name="Column header" forecolor="#FAFAFA" fontSize="12.0" bold="true"/>
+	<style name="Detail" forecolor="#1A1A1A" fontSize="10.0"/>
+	<style name="DetailAlt" style="Detail">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<style name="Footer" mode="Opaque" forecolor="#FCFCFC" backcolor="#0574EB"/>
+	<parameter name="customerId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.js.ic.ds" value="dataSources/custom"/>
+		<property name="com.jaspersoft.studio.js.ic.label" value="Customer"/>
+		<property name="com.jaspersoft.studio.js.ic.type" value="SINGLE_QUERY"/>
+		<property name="com.jaspersoft.studio.js.ic.value" value="{&quot;query&quot;:&quot;select c.id, c.first_name || ' ' || c.last_name as name from customers c join orders o on o.customer_id = c.id group by c.id, c.first_name, c.last_name order by count(*) desc, c.last_name, c.first_name&quot;,&quot;language&quot;:&quot;sql&quot;,&quot;valueField&quot;:&quot;id&quot;,&quot;columns&quot;:[&quot;name&quot;]}"/>
+	</parameter>
+	<parameter name="status" class="java.util.ArrayList" nestedType="java.lang.String">
+		<property name="com.jaspersoft.studio.js.ic.label" value="Status"/>
+		<property name="com.jaspersoft.studio.js.ic.type" value="MULTI_QUERY"/>
+		<property name="com.jaspersoft.studio.js.ic.value" value="{&quot;query&quot;:&quot;select distinct status as id, status as name from orders order by status&quot;,&quot;language&quot;:&quot;sql&quot;,&quot;valueField&quot;:&quot;id&quot;,&quot;columns&quot;:[&quot;name&quot;]}"/>
+	</parameter>
+	<parameter name="categoryId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.js.ic.label" value="Category"/>
+		<property name="com.jaspersoft.studio.js.ic.type" value="SINGLE_QUERY"/>
+		<property name="com.jaspersoft.studio.js.ic.value" value="{&quot;query&quot;:&quot;select id, name from categories order by name&quot;,&quot;language&quot;:&quot;sql&quot;,&quot;valueField&quot;:&quot;id&quot;,&quot;columns&quot;:[&quot;name&quot;]}"/>
+	</parameter>
+	<parameter name="dateFrom" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.js.ic.label" value="Order Date From"/>
+	</parameter>
+	<parameter name="dateTo" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.js.ic.label" value="Order Date To"/>
+	</parameter>
+	<parameter name="minOrderTotal" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.js.ic.label" value="Minimum Order Total"/>
+	</parameter>
+	<parameter name="minItems" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.js.ic.label" value="Minimum Items"/>
+	</parameter>
+	<query language="sql"><![CDATA[SELECT
+  os.order_id,
+  os.order_date,
+  os.status,
+  os.customer_id,
+  os.customer_name,
+  os.region_name,
+  os.country_name,
+  os.city_name,
+  os.order_total,
+  oi_stats.item_count,
+  CASE WHEN oi_stats.item_count = 0 THEN 0 ELSE os.order_total / oi_stats.item_count END AS avg_item_price
+FROM v_order_summary os
+JOIN (
+  SELECT oi.order_id, SUM(oi.quantity) AS item_count
+  FROM order_items oi
+  GROUP BY oi.order_id
+) oi_stats ON oi_stats.order_id = os.order_id
+WHERE
+  ($P{customerId} IS NULL OR os.customer_id = $P{customerId})
+  AND $X{IN, os.status, status}
+  AND ($P{dateFrom} IS NULL OR os.order_date >= $P{dateFrom})
+  AND ($P{dateTo} IS NULL OR os.order_date <= $P{dateTo})
+  AND ($P{minOrderTotal} IS NULL OR os.order_total >= $P{minOrderTotal})
+  AND ($P{minItems} IS NULL OR oi_stats.item_count >= $P{minItems})
+  AND ($P{categoryId} IS NULL OR EXISTS (
+    SELECT 1
+    FROM order_items oi
+    JOIN products p ON p.id = oi.product_id
+    WHERE oi.order_id = os.order_id AND p.category_id = $P{categoryId}
+  ))
+ORDER BY os.order_date DESC, os.order_id DESC]]></query>
+	<field name="ORDER_ID" class="java.lang.Integer"/>
+	<field name="ORDER_DATE" class="java.sql.Date"/>
+	<field name="STATUS" class="java.lang.String"/>
+	<field name="CUSTOMER_ID" class="java.lang.Integer"/>
+	<field name="CUSTOMER_NAME" class="java.lang.String"/>
+	<field name="REGION_NAME" class="java.lang.String"/>
+	<field name="COUNTRY_NAME" class="java.lang.String"/>
+	<field name="CITY_NAME" class="java.lang.String"/>
+	<field name="ORDER_TOTAL" class="java.math.BigDecimal"/>
+	<field name="ITEM_COUNT" class="java.lang.Long"/>
+	<field name="AVG_ITEM_PRICE" class="java.math.BigDecimal"/>
+	<title height="120">
+		<element kind="frame" uuid="f206173c-2eff-4968-af11-ec246ae1a25e" stretchType="NoStretch" x="0" y="0" width="782" height="100">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<element kind="frame" uuid="45205890-d620-45b2-b87c-01514bc05ac4" mode="Opaque" x="0" y="0" width="782" height="70" backcolor="#3E3854">
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="ShowOutOfBoundContent" value="true"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<element kind="staticText" uuid="ee16e8ca-4add-4433-8fea-745da3d3a3f2" x="10" y="15" width="380" height="45" forecolor="#D6CCED" fontSize="26.0" bold="false" style="Title">
+					<text><![CDATA[Orders]]></text>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="image" uuid="05a0b546-8b47-44ab-9f89-a4ea35178dc5" stretchType="NoStretch" x="700" y="3" width="75" height="65">
+					<expression><![CDATA["/shared/img/logo.png"]]></expression>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</element>
+			</element>
+			<element kind="frame" uuid="d83ca60d-ed4f-440d-9d35-a3169c3b1ee0" mode="Opaque" x="0" y="70" width="782" height="30" forecolor="#000000" backcolor="#D4537E">
+				<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<element kind="textField" uuid="c48cb0d0-532c-444a-b56a-9be2c835421f" x="630" y="8" width="144" height="20" forecolor="#FFFFFF" fontSize="12.0" pattern="EEEEE dd MMMMM yyyy" hTextAlign="Right">
+					<expression><![CDATA[new java.util.Date()]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</element>
+			</element>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</title>
+	<columnHeader height="30">
+		<element kind="frame" uuid="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d" mode="Opaque" x="0" y="0" width="782" height="26" backcolor="#574969">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<element kind="staticText" uuid="286a2952-5a61-46ac-9cfd-805323b3be6d" x="0" y="2" width="55" height="22" hTextAlign="Left" vTextAlign="Middle" style="Column header">
+				<paragraph leftIndent="5"/>
+				<text><![CDATA[Order]]></text>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+			</element>
+			<element kind="staticText" uuid="fbd06cfe-e920-4d1e-95d9-bafce3dc66e4" x="55" y="2" width="75" height="22" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[Date]]></text>
+			</element>
+			<element kind="staticText" uuid="5f829847-bfd1-4dfa-b73b-7b0774231cf3" x="130" y="2" width="60" height="22" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[Status]]></text>
+			</element>
+			<element kind="staticText" uuid="1a460f4a-a33e-40a2-9c59-fd2c37d43ded" x="190" y="2" width="160" height="22" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[Customer]]></text>
+			</element>
+			<element kind="staticText" uuid="80232271-7eb5-4d1e-a60b-819f4c9cd0b6" x="350" y="2" width="80" height="22" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[Region]]></text>
+			</element>
+			<element kind="staticText" uuid="568000d3-bbd7-4549-9fd5-5d9ad9ed14e9" x="430" y="2" width="90" height="22" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[Country]]></text>
+			</element>
+			<element kind="staticText" uuid="2f6aa7b8-7be0-47ca-a83c-c03428e93b5c" x="520" y="2" width="90" height="22" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[City]]></text>
+			</element>
+			<element kind="staticText" uuid="6e1a4bcc-d35f-4bd9-9858-352eb575f83a" x="610" y="2" width="45" height="22" hTextAlign="Right" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[Items]]></text>
+			</element>
+			<element kind="staticText" uuid="6f87fd2f-cb1b-4a2f-9522-fc66cec02ed5" x="655" y="2" width="65" height="22" hTextAlign="Right" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[Total]]></text>
+			</element>
+			<element kind="staticText" uuid="6cb8b5e2-c22b-461f-a802-26c6d587c78f" x="720" y="2" width="62" height="22" hTextAlign="Right" vTextAlign="Middle" style="Column header">
+				<text><![CDATA[Avg Item]]></text>
+			</element>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" uuid="8396a886-12e3-41cf-8ed1-e546782671d4" x="0" y="0" width="55" height="20" hTextAlign="Left" style="DetailAlt">
+				<paragraph leftIndent="5"/>
+				<expression><![CDATA[$F{ORDER_ID}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Order ID"/>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+			</element>
+			<element kind="textField" uuid="eb725cef-2012-4ce1-9748-6ae10fedcd3d" x="55" y="0" width="75" height="20" pattern="yyyy-MM-dd" style="DetailAlt">
+				<expression><![CDATA[$F{ORDER_DATE}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Order Date"/>
+			</element>
+			<element kind="textField" uuid="71610f8a-0215-4303-a57d-918fbc95d898" x="130" y="0" width="60" height="20" style="DetailAlt">
+				<expression><![CDATA[$F{STATUS}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Status"/>
+			</element>
+			<element kind="textField" uuid="b032b49b-b45b-489e-8b8b-b9ee4b80d852" x="190" y="0" width="160" height="20" style="DetailAlt">
+				<expression><![CDATA[$F{CUSTOMER_NAME}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Customer"/>
+			</element>
+			<element kind="textField" uuid="acd86e14-7ea1-477f-b7c0-cf1a3896714a" x="350" y="0" width="80" height="20" style="DetailAlt">
+				<expression><![CDATA[$F{REGION_NAME}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Region"/>
+			</element>
+			<element kind="textField" uuid="623bf51d-f5dc-4405-bba6-b28abce02b5e" x="430" y="0" width="90" height="20" style="DetailAlt">
+				<expression><![CDATA[$F{COUNTRY_NAME}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Country"/>
+			</element>
+			<element kind="textField" uuid="ac749904-cb54-4283-b0d8-1a19da092fe3" x="520" y="0" width="90" height="20" style="DetailAlt">
+				<expression><![CDATA[$F{CITY_NAME}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="City"/>
+			</element>
+			<element kind="textField" uuid="b3b4ac65-1b70-4c04-9de7-8c45bbaf10eb" x="610" y="0" width="45" height="20" hTextAlign="Right" style="DetailAlt">
+				<expression><![CDATA[$F{ITEM_COUNT}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Items"/>
+			</element>
+			<element kind="textField" uuid="0449b6a6-88a9-4665-a7dc-994372df0cb5" x="655" y="0" width="65" height="20" pattern="#,##0.00" hTextAlign="Right" style="DetailAlt">
+				<expression><![CDATA[$F{ORDER_TOTAL}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Order Total"/>
+			</element>
+			<element kind="textField" uuid="c1b8502d-8054-4619-88f6-3973a82de5a7" x="720" y="0" width="62" height="20" pattern="#,##0.00" hTextAlign="Right" style="DetailAlt">
+				<expression><![CDATA[$F{AVG_ITEM_PRICE}]]></expression>
+				<property name="net.sf.jasperreports.export.csv.column.name" value="Average Item Price"/>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="25">
+		<element kind="frame" uuid="cccd603a-585e-4f0e-80ba-469809542103" mode="Opaque" x="0" y="1" width="782" height="24" forecolor="#E0E0E0" backcolor="#3E3854">
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<element kind="textField" uuid="25673c8a-2701-46ad-ada7-db1f5aba962d" mode="Transparent" x="660" y="1" width="80" height="20" fontSize="10.0" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Column header">
+				<expression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			</element>
+			<element kind="textField" uuid="4b954d55-2868-44e4-9859-75d034aebb03" x="740" y="1" width="40" height="20" fontSize="10.0" evaluationTime="Report" bold="false" vTextAlign="Middle" style="Column header">
+				<expression><![CDATA[" " + $V{PAGE_NUMBER}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			</element>
+		</element>
+	</pageFooter>
+</jasperReport>

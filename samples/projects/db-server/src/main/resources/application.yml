@@ -1,0 +1,6 @@
+spring:
+  config:
+    import: "classpath:base-config.yml"
+
+  main:
+    web-application-type: none

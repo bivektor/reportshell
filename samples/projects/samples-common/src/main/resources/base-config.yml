@@ -1,0 +1,39 @@
+# Base Spring application configuration file imported by sample project application.yml files
+
+spring:
+  # Embedded demo data source
+  datasource:
+    url: jdbc:h2:mem:devdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;TRACE_LEVEL_SYSTEM_OUT=2;TIME ZONE=UTC
+    driver-class-name: org.h2.Driver
+    username: sa
+
+  # SQL scripts to initialize the database
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/data.sql
+
+  # H2 console is enabled so that you can inspect the samples database
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # Disable JPA auto-generation of DDL
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+  # Home page configuration
+  mvc:
+    view:
+      controllers:
+        - urlPath: /
+          viewName: index
+
+reportshell:
+  expression-evaluation:
+    # Enable JRXML default value expression evaluation for input controls
+    enabled: true

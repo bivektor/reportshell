@@ -1,0 +1,63 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="Customer_Detail" language="java" pageWidth="575" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8e15d519-eab3-497d-b483-a5c1caac3ee0">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Demo H2 DB"/>
+	<style name="Title" fontName="Arial" fontSize="26.0" bold="true"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18.0"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12.0" bold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12.0"/>
+	<parameter name="customerId" class="java.lang.Long"/>
+	<parameter name="customerName" forPrompting="false" class="java.lang.String"/>
+	<parameter name="customerSurname" forPrompting="false" class="java.lang.String"/>
+	<query language="SQL"><![CDATA[SELECT p.NAME        AS PRODUCT_NAME,
+       SUM(oi.QUANTITY * oi.UNIT_PRICE) AS TOTAL,
+       SUM(SUM(oi.QUANTITY * oi.UNIT_PRICE)) 
+           OVER () AS GRAND_TOTAL
+FROM products p
+JOIN ORDER_ITEMS oi ON oi.PRODUCT_ID = p.ID
+JOIN ORDERS o       ON oi.ORDER_ID   = o.ID
+WHERE o.CUSTOMER_ID = $P!{customerId}
+GROUP BY p.NAME]]></query>
+	<field name="PRODUCT_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="PRODUCT_NAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="PRODUCTS"/>
+	</field>
+	<field name="TOTAL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTAL"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTAL"/>
+	</field>
+	<field name="GRAND_TOTAL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="GRAND_TOTAL"/>
+		<property name="com.jaspersoft.studio.field.label" value="GRAND_TOTAL"/>
+	</field>
+	<background splitType="Stretch"/>
+	<summary height="285">
+		<element kind="frame" uuid="40e31c30-261d-43bf-82bc-ea3bcbfef31c" x="0" y="5" width="535" height="280">
+			<element kind="chart" chartType="pie" uuid="1b82e918-b888-4790-9ef0-ab14f8384995" key="" x="0" y="0" width="535" height="280" evaluationTime="Report" renderType="image">
+				<titleExpression><![CDATA["Total Spend By Product"]]></titleExpression>
+				<dataset kind="pie">
+					<otherSectionHyperlink linkType="None" linkTarget="Self"/>
+					<series>
+						<keyExpression><![CDATA[$F{PRODUCT_NAME}]]></keyExpression>
+						<valueExpression><![CDATA[$F{TOTAL}]]></valueExpression>
+						<labelExpression><![CDATA[CONCATENATE($F{PRODUCT_NAME}, " (", new java.text.DecimalFormat("0.##%")
+          .format($F{TOTAL}.divide($F{GRAND_TOTAL},
+                               java.math.MathContext.DECIMAL64)
+                        .doubleValue()), ")")]]></labelExpression>
+						<sectionHyperlink linkTarget="Self"/>
+					</series>
+				</dataset>
+				<plot>
+					<itemLabel/>
+				</plot>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+		</element>
+	</summary>
+	<noData height="50">
+		<element kind="textField" uuid="e7816c03-1d04-418c-bb12-91a9c1d41806" x="0" y="0" width="535" height="30" hTextAlign="Center">
+			<expression><![CDATA["Customer has no orders"]]></expression>
+		</element>
+	</noData>
+</jasperReport>

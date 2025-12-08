@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--/* Common styles shared across all pages */-->
+<th:block th:fragment="head-common">
+  <meta name="author" content="Bivektor Team">
+  <link rel="icon" type="image/png" href="/reportshell-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bs-primary: #342967;
+      --bs-accent: #d4537e;
+      --bs-link-color: var(--bs-accent);
+      --bs-link-hover-color: #a14060;
+    }
+
+    *, ::after, ::before {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, Roboto, Helvetica, sans-serif;
+      margin: 0;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    a {
+      color: var(--bs-link-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--bs-link-hover-color);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 10px 40px;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .header a {
+      color: var(--bs-primary);
+      line-height: 1.5rem;
+    }
+
+    .header a:hover {
+      color: #52429d;
+    }
+
+    .header .nav-link {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
+
+    .header .logout-form {
+      margin-left: auto;
+      margin-bottom: 0;
+    }
+
+    .header .logout-form button {
+      padding: 6px 15px;
+    }
+  </style>
+</th:block>
+
+<!--/* Shared header bar */-->
+<div th:fragment="header" class="header">
+  <a th:href="@{/}"><img src="/reportshell-logo.png" style="height: 30px; vertical-align: middle" alt="Logo"></a>
+  <a class="nav-link" th:href="@{/}">Samples Home</a>
+  <form th:if="${loggedIn}"
+        class="logout-form"
+        th:action="@{/logout}"
+        method="post">
+    <button type="submit">Logout</button>
+  </form>
+</div>
+
+</html>

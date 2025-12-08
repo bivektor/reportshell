@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReportShell Sample Reports</title>
+  <th:block th:replace="~{fragments/layout :: head-common}" />
+  <style>
+    h1 {
+      color: var(--bs-primary);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: var(--bs-primary);
+      margin-top: 30px;
+    }
+
+    .content {
+      max-width: 900px;
+      padding: 0 40px 60px;
+    }
+
+    .report-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .report-item {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin: 15px 0;
+      padding: 20px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .report-item h3 {
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+    }
+
+    .report-item a {
+      font-weight: 400;
+      text-align: right;
+    }
+
+    .report-item a:hover {
+      text-decoration: underline;
+    }
+
+    .view-link {
+      display: block;
+      margin-top: 10px;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .features {
+      margin: 10px 0;
+      padding-left: 20px;
+      color: #555;
+      font-size: 0.95em;
+    }
+
+    .features li {
+      margin: 5px 0;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    footer a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<div class="content">
+  <h2>Available Sample Reports</h2>
+
+  <p>Different sample applications expose different reports. Run other samples to explore additional
+    configuration options.</p>
+
+  <ul class="report-list">
+    <li class="report-item">
+      <h3>Customers Report</h3>
+      <p>Customer listing report with an advanced parameter form.</p>
+      <ul class="features">
+        <li>Nested multi-valued cascading controls (regions > countries > cities)</li>
+        <li>Input control parameter default value evaluation</li>
+        <li>Format validation for date and number parameters</li>
+      </ul>
+      <a href="/reportshell/view/Customers" class="view-link">View Report</a>
+    </li>
+
+    <li class="report-item">
+      <h3>Customer Spend Report</h3>
+      <p>Lists all customers with total spend by product charts.</p>
+      <ul class="features">
+        <li>Subreport resolution relative to a root directory (charts).</li>
+        <li>Demonstrates UI when the report has no input controls.</li>
+      </ul>
+      <a href="/reportshell/view/CustomerSpend" class="view-link">View Report</a>
+    </li>
+
+    <li class="report-item"
+        th:if="${@environment.getProperty('spring.application.name') == 'custom-data-source'}">
+      <h3>Orders Report</h3>
+      <p>Order history with filters and derived totals</p>
+      <ul class="features">
+        <li>Demonstrates report data set using a custom data source.</li>
+        <li>Includes a customer dropdown querying from the same custom data source.</li>
+      </ul>
+      <a href="/reportshell/view/Orders" class="view-link">View Report</a>
+    </li>
+
+    <li class="report-item">
+      <h3>Countries by Region Report</h3>
+      <p>Lists countries filtered by region.</p>
+      <ul class="features"
+          th:if="${@environment.getProperty('spring.application.name') == 'custom-report-store'}">
+        <li>Report key "Countries" is stored in the database,
+          mapped to the compiled file at <strong>region/Countries.jasper</strong>
+        </li>
+        <li>Demonstrates how a custom report store decouples the URL key from the file path</li>
+      </ul>
+      <ul class="features"
+          th:if="${@environment.getProperty('spring.application.name') != 'custom-report-store'}">
+        <li>Demonstrates nested path report lookup (/region/Countries) in the URL</li>
+      </ul>
+      <a th:if="${@environment.getProperty('spring.application.name') == 'custom-report-store'}"
+         href="/reportshell/view/Countries" class="view-link">View Report</a>
+      <a th:if="${@environment.getProperty('spring.application.name') != 'custom-report-store'}"
+         href="/reportshell/view/region/Countries" class="view-link">View Report</a>
+    </li>
+  </ul>
+
+  <h2>Exploring the REST API</h2>
+  <p>You can use your browser's developer tools (Inspector/DevTools) to observe the REST API requests
+    made by the viewer. Consult the <a href="https://reportshell.com/docs/reference/rest-api"
+                                       target="_blank">REST API reference documentation</a> to try
+    additional APIs and parameters not exposed in this demo viewer.</p>
+</div>
+</body>
+</html>
