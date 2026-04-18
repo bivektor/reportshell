@@ -44,8 +44,8 @@ https://github.com/Jaspersoft/jasperreports
 
 ## Trademark Notice
 
-JasperReports(R) and Jaspersoft(R) are trademarks of Cloud Software Group, Inc.
-Bivektor, Inc. is not affiliated with, endorsed by, or sponsored by Cloud Software Group, Inc.
+JasperReports® and Jaspersoft® are trademarks of Cloud Software Group, Inc.
+ReportShell and Bivektor, Inc. are not affiliated with, endorsed by, or sponsored by Cloud Software Group, Inc.
 Any reference to these trademarks in this repository, ReportShell Software, its website, documentation,
 or related materials is made solely for informational, descriptive, comparative,
 and interoperability purposes.
