@@ -28,7 +28,7 @@ This repository contains proprietary ReportShell code and samples. Some samples 
 artifacts depend on third-party software licensed separately from ReportShell.
 
 ReportShell and the samples in this repository require 
-JasperReports(R) Library as a runtime dependency. 
+JasperReports® Library as a linked dependency. 
 JasperReports is licensed under the GNU Lesser General Public License v3.0 (LGPL-3.0).
 The LGPL-3.0 is a set of additional permissions on
 top of the GNU General Public License, version 3.0 (GPL-3.0). Both license
