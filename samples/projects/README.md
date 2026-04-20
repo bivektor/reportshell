@@ -17,7 +17,7 @@ sample.
 | **[exporter-registration](exporter-registration/README.md)** | Demonstrates supporting additional export formats                           |
 | **[authorization](authorization/README.md)**                 | Demonstrates securing access to reports via Spring Security roles           |
 
-ReportShell Maven packages are published on GitHub packages of this repository. 
+ReportShell Maven packages are published on the GitHub Packages repository.
 For Gradle, build.gradle.kts uses `github.user` and `github.token` properties.
 You can set these in your `~/.gradle/gradle.properties` file.
 

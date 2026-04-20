@@ -7,30 +7,28 @@ ReportShell reports using Spring Security.
 
 The authorization sample shows how to:
 
-- Implement a custom `ReportAuthorizationService` using `ReportAuthorizationContext`
+- Implement a custom `AuthorizationService` using `AuthorizationContext`
 - Configure Spring Security with in-memory users and roles
-- Store role-based permissions in JRXML report properties
+- Store role-based permissions in a JRXML report property
 - Control report viewing and execution based on user roles
 
 ## Architecture
 
 ### ExampleAuthorizationService
 
-`ExampleAuthorizationService` implements `ReportAuthorizationService` and checks permissions based on:
+`ExampleAuthorizationService` implements `AuthorizationService` and checks permissions based on:
 
 1. The authenticated user’s roles (from Spring Security)
 2. Allowed roles defined in the report’s JRXML properties
 
-In this sample, the authorization service casts the `ReportDescriptor` to `JasperReportAccessor` 
+In this sample, the authorization service casts the `ReportDescriptor` to `CompiledReportAccessor` 
 to access the underlying `JasperReport`. This works because `DefaultReportStore` returns a 
 `ReportDescriptor` that includes the `JasperReport` instance.
 
-With a custom `ReportStore`, you may return descriptors from a database or file system and 
+With a custom report store, you may return descriptors from a database or file system and 
 load the `JasperReport` separately. In that case, the `ReportDescriptor` would not 
-contain the `JasperReport` object.
-
-If so, you can embed security information in the `ReportDescriptor` or 
-load roles/permissions from a separate repository.
+contain the `JasperReport` object, and you'd typically load permission mappings from
+your own storage.
 
 **Permission check logic:**
 
@@ -87,8 +85,8 @@ This configuration allows:
 
 ## Sample Reports
 
-- **customers** – Allows MANAGER access only
-- **all-customers** - Allows ADMIN access only
+- **Customers** – Allows MANAGER access only
+- **CustomerSpend** - Allows ADMIN access only
 
 Other reports don't specify any roles in which case `ExampleAuthorizationService` assumes permit-all.
 The service skips role check if the user has `ROLE_ADMIN` role. 

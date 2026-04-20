@@ -2,8 +2,9 @@ package reportshell.samples.authorization;
 
 import com.bivektor.reportshell.core.CompiledReport;
 import com.bivektor.reportshell.core.CompiledReportAccessor;
-import com.bivektor.reportshell.security.ReportAuthorizationContext;
-import com.bivektor.reportshell.security.ReportAuthorizationService;
+import com.bivektor.reportshell.core.context.ReportOperationContext;
+import com.bivektor.reportshell.security.AuthorizationContext;
+import com.bivektor.reportshell.security.AuthorizationService;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
@@ -21,10 +22,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ExampleAuthorizationService implements ReportAuthorizationService {
+public class ExampleAuthorizationService implements AuthorizationService {
 
   @Override
-  public boolean isAuthorized(@NotNull ReportAuthorizationContext context) {
+  public boolean isAuthorized(@NotNull AuthorizationContext context) {
     var auth = (Authentication) context.getUser();
 
     var userRoles = auth == null
@@ -38,7 +39,14 @@ public class ExampleAuthorizationService implements ReportAuthorizationService {
       return true;
     }
 
-    var compiledReport = tryResolveCompiledReport(context);
+    // Reject non-report operations (e.g., Executions API).
+    // In DEVELOPER mode (no license), only report-bound operations are available, so this
+    // check won't trigger here — but it's included for completeness.
+    if (!(context.getOperationContext() instanceof ReportOperationContext reportContext)) {
+      return false;
+    }
+
+    var compiledReport = tryResolveCompiledReport(reportContext);
     if (compiledReport == null) {
       return false;
     }
@@ -54,20 +62,21 @@ public class ExampleAuthorizationService implements ReportAuthorizationService {
   }
 
   /**
-   * Check if we can resolve a compiled report from the context.
+   * Resolves the compiled report from the operation context.
    * <p>
-   * Ideally, this should not be needed because either the report descriptors contain necessary authorization like
-   * permissions or roles, or a service/store loads them.
+   * With the default file-based report store, the descriptor implements {@link CompiledReportAccessor}
+   * because the report file itself is the first-class entity. This allows reading report properties
+   * (such as {@code security.roles.allow}) directly from the compiled report.
    * </p>
    * <p>
-   * In this case, we trust that the system is using default conventions.
+   * Applications using a custom report store (e.g., database-backed) would typically load
+   * authorization metadata from their own storage instead.
    * </p>
    */
   @Nullable
-  private CompiledReport tryResolveCompiledReport(ReportAuthorizationContext context) {
-    var report = context.getReport();
+  private CompiledReport tryResolveCompiledReport(ReportOperationContext operationContext) {
+    var report = operationContext.resolveReport();
 
-    // Default store returns a descriptor that already contains the compiled report
     if (report instanceof CompiledReportAccessor compiledReportAccessor) {
       return compiledReportAccessor.getCompiledReport();
     }
