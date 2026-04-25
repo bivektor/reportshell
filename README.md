@@ -5,7 +5,7 @@ delivered as a set of Spring Framework and Spring Boot components and configurat
 that transforms your JasperReports® files into ready-to-use REST APIs 
 for dynamic parameter forms, cascading controls, execution, caching, and export capabilities.
 
-ReportShell is commercial, proprietary software free for development and evaluation. 
+ReportShell is commercial, proprietary software of Bivektor, Inc. free for development and evaluation. 
 See LICENSE for details.
 
 ## Website & Support
@@ -44,8 +44,9 @@ https://github.com/Jaspersoft/jasperreports
 
 ## Trademark Notice
 
-JasperReports® and Jaspersoft® are trademarks of Cloud Software Group, Inc.
-ReportShell and Bivektor, Inc. are not affiliated with, endorsed by, or sponsored by Cloud Software Group, Inc.
+**JasperReports®** and **Jaspersoft®** are trademarks or registered trademarks of their respective owners.
+**ReportShell** and **Bivektor, Inc.** are not affiliated with, endorsed by, sponsored by or otherwise
+associated with the owners of the **JasperReports®** and **Jaspersoft®** marks.
 Any reference to these trademarks in this repository, ReportShell Software, its website, documentation,
 or related materials is made solely for informational, descriptive, comparative,
 and interoperability purposes.
