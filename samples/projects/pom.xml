@@ -19,7 +19,7 @@
   <properties>
     <jasperReports.version>7.0.4</jasperReports.version>
     <lombok.version>1.18.30</lombok.version>
-    <reportshell.version>1.0.6</reportshell.version>
+    <reportshell.version>1.1.0</reportshell.version>
   </properties>
 
   <modules>
