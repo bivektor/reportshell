@@ -1,8 +1,7 @@
 package reportshell.samples.exporters;
 
-import com.bivektor.reportshell.core.export.JasperExporterFactory;
+import com.bivektor.reportshell.core.export.AbstractReportExporterFactory;
 import com.bivektor.reportshell.core.export.ReportExportContext;
-import lombok.NonNull;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.export.RtfReportConfiguration;
 import net.sf.jasperreports.export.SimpleRtfReportConfiguration;
@@ -10,16 +9,16 @@ import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RtfExporterFactory extends JasperExporterFactory<RtfReportConfiguration, JRRtfExporter> {
+public class RtfExporterFactory extends AbstractReportExporterFactory<RtfReportConfiguration, JRRtfExporter> {
 
-  @NonNull
+  @NotNull
   @Override
-  protected JRRtfExporter createJasperExporter(@NonNull ReportExportContext context) {
-    var exporter = new JRRtfExporter(context.getJasperContext());
+  protected JRRtfExporter createJasperReportsExporter(@NotNull ReportExportContext context) {
+    var exporter = new JRRtfExporter(context.getJasperReportsContext());
     exporter.setExporterInput(context.getInput());
     exporter.setExporterOutput(new SimpleWriterExporterOutput(
-        context.getOutputStream(),
-        context.getDefaultCharacterEncoding()
+      context.getOutputStream(),
+      context.getDefaultCharacterEncoding()
     ));
     return exporter;
   }
