@@ -8,6 +8,14 @@ for dynamic parameter forms, cascading controls, execution, caching, and export 
 ReportShell is commercial, proprietary software of Bivektor, Inc. free for development and evaluation. 
 See LICENSE for details.
 
+> [Disclaimer] **JasperReports®** and **Jaspersoft®** are trademarks of
+> **Cloud Software Group, Inc. and/or its subsidiaries**.
+> **ReportShell** and **Bivektor, Inc.** are not affiliated with, endorsed by, sponsored by or otherwise
+associated with Cloud Software Group, Inc.
+> Any reference to these trademarks in this repository, ReportShell Software, its website, documentation,
+or related materials is made solely for informational, descriptive, comparative,
+and interoperability purposes. Plese see our website for full trademark disclaimer.
+
 ## Website & Support
 
 For documentation, pricing, licensing, and support plans, visit:
@@ -41,12 +49,3 @@ https://www.gnu.org/licenses/gpl-3.0.html
 The JasperReports source code is available at:
 
 https://github.com/Jaspersoft/jasperreports
-
-## Trademark Notice
-
-**JasperReports®** and **Jaspersoft®** are trademarks or registered trademarks of their respective owners.
-**ReportShell** and **Bivektor, Inc.** are not affiliated with, endorsed by, sponsored by or otherwise
-associated with the owners of the **JasperReports®** and **Jaspersoft®** marks.
-Any reference to these trademarks in this repository, ReportShell Software, its website, documentation,
-or related materials is made solely for informational, descriptive, comparative,
-and interoperability purposes.
