@@ -8,11 +8,11 @@ for dynamic parameter forms, cascading controls, execution, caching, and export 
 ReportShell™ is commercial, proprietary software of Bivektor, Inc. free for development and evaluation. 
 See LICENSE for details.
 
-> [Disclaimer] **JasperReports®** and **Jaspersoft®** are trademarks of
-> **Cloud Software Group, Inc. and/or its subsidiaries**.
+> [Disclaimer] JasperReports® and Jaspersoft® are trademarks of
+> Cloud Software Group, Inc. and/or its subsidiaries. Spring® is a trademark of Broadcom Inc. and/or its subsidiaries.
 > **ReportShell** and **Bivektor, Inc.** are not affiliated with, endorsed by, sponsored by or otherwise
-associated with Cloud Software Group, Inc.
-> Any reference to these trademarks in this repository, ReportShell Software, its website, documentation,
+associated with Cloud Software Group, Inc. or Broadcom Inc.
+> Any reference to these trademarks in this repository, ReportShell™ Software, its website, documentation,
 or related materials is made solely for informational, descriptive, comparative,
 and interoperability purposes. Plese see our website for full trademark disclaimer.
 
