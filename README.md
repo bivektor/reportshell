@@ -1,4 +1,4 @@
-# Bivektor ReportShell.
+# Bivektor ReportShell
 
 ReportShell™ is a lightweight embedded web reporting framework 
 delivered as a set of Spring Framework and Spring Boot components and configurations 
