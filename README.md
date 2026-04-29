@@ -1,7 +1,7 @@
 # Bivektor ReportShell
 
 ReportShell™ is a lightweight embedded web reporting framework 
-delivered as a set of Spring Framework and Spring Boot components and configurations 
+delivered as a set of Spring® Framework and Spring® Boot components and configurations 
 that transforms your JasperReports® files into ready-to-use REST APIs 
 for dynamic parameter forms, cascading controls, execution, caching, and export capabilities.
 
