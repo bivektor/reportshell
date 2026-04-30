@@ -2,7 +2,7 @@
 <head>
   <title th:text="${report.displayName} + '| ReportShell Samples'"></title>
   <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}"/>
-  <th:block th:replace="~{fragments/layout :: head-common}" />
+  <th:block th:replace="~{fragments/layout :: head-common}"/>
 </head>
 <body>
 <div style="display: flex; flex-direction: column; height: 100vh">
@@ -10,28 +10,29 @@
   <div id="root" style="flex-grow: 1; display: flex; flex-direction: column"></div>
 </div>
 <script type="module" th:inline="javascript">
-  const localeParts = {
-    language: /*[[${locale.language}]]*/ '',
-    country: /*[[${locale.country}]]*/ '',
-    script: /*[[${locale.script}]]*/ '',
-    variant: /*[[${locale.variant}]]*/ '',
-  };
+  const viewerModule = await import('[(@{/reportshell/assets/reportshell-viewer-react-latest.js})]');
+  const csrfParamName = /*[[(${_csrf?.parameterName})]]*/ '_csrf';
+  const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+  const env = /*[[(${viewerEnv})]]*/ {};
+  await viewerModule.init(env);
 
-  const viewerModule = await import(
-      '[(@{/reportshell/assets/reportshell-viewer-react-1.0.0.js})]'
-      );
+  const props = /*[[(${viewerProps})]]*/ {};
 
-  window.reportshell = {
-    viewerApiBaseUrl: '[(@{/reportshell/api/v1})]',
-    exportFormats: /*[[(${exportFormats})]]*/ [],
-    i18n: await viewerModule.getBestMatchingLocale(localeParts),
-    csrf: () => ({
-      parameterName: '_csrf',
-      token: document.querySelector('meta[name="_csrf"]')?.getAttribute('content'),
-    }),
-  };
+  if (csrfToken) {
+    props.requestInterceptor = (request) => {
+      if (request.method === 'GET') {
+        return;
+      }
+      if (!csrfToken) {
+        return;
+      }
+      const formData = request.body?.formData;
+      if (formData) {
+        formData.append(csrfParamName, csrfToken);
+      }
+    }
+  }
 
-  const props = /*[[(${props})]]*/ {};
   viewerModule.mountReportViewer(document.getElementById('root'), props);
 </script>
 </body>
